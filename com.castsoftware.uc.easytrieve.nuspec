@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>com.castsoftware.uc.easytrieve</id>
+    <version>1.0.18</version>
+    <title>Technology Extension for EasyTrieve</title>
+    <authors>CAST Labs</authors>
+    <owners>CAST</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>https://help.castsoftware.com/hc/en-us/articles/212612648-AIP-Extension-License</licenseUrl>
+    <projectUrl>https://github.com/CAST-Extend/Easytrieve-Extension/wiki</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/CAST-Extend/Easytrieve-Extension/master/Easytrieve.png</iconUrl>
+    <description>This extension can be installed to enable the analysis of EasyTrieve code (Programs and Macros). Function Point counting is supported. Quality and Sizing are not supported. The extension is based on the CAST Universal Analyzer.</description>
+    <releaseNotes>https://github.com/CAST-Extend/Easytrieve-Extension/wiki#version-1018-release-note</releaseNotes>
+    <tags>Platform:All CASTLabs FPQuality techno:db techno:mainframe CAIP8.0 CAIP8.3</tags>
+    <dependencies>
+      <dependency id="CAIP" version="8.3.0" />
+      <dependency id="com.castsoftware.labs.cobol.swcopy.update" version="1.0.13" />
+      <dependency id="com.castsoftware.dmtgenericfilediscoverer" version="1.0.6" />
+    </dependencies>
+  </metadata>
+</package>
