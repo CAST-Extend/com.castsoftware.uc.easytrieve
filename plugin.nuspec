@@ -15,6 +15,7 @@
     <tags>Platform:All CASTLabs FPQuality techno:db techno:mainframe CAIP8.0 CAIP8.3</tags>
     <dependencies>
       <dependency id="CAIP" version="8.3.0" />
+      <dependency id="com.castsoftware.wbslinker" version="1.6.7" />
       <dependency id="com.castsoftware.labs.cobol.swcopy.update" version="1.0.13" />
       <dependency id="com.castsoftware.dmtgenericfilediscoverer" version="1.0.6" />
     </dependencies>

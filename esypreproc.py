@@ -14,7 +14,7 @@ class esypreproc(ApplicationLevelExtension):
     def __init__(self):
         
         ApplicationLevelExtension.__init__(self)
-        self.extensions = ['.esy','.mac']
+        self.extensions = ['.esy','.mac', '.ezt']
 
     def start_application(self, application):
          
