@@ -88,7 +88,7 @@ class TestIntegration(unittest.TestCase):
 
         self.assertTrue(analysis.get_link_by_caller_callee('callLink', program, procedure))
         
-    def test_file_link(self):
+    def test_put_file_link(self):
 
         analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
         
@@ -136,6 +136,90 @@ class TestIntegration(unittest.TestCase):
        LOCATION *
        NULLABLE
        FROM CUST_TB''', getattr(query, 'CAST_SQL_MetricableQuery.sqlQuery'))
+
+    def test_get_file_link(self):
+
+        analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
+        
+        analysis.add_dependency('com.castsoftware.internal.platform')
+        analysis.add_dependency('com.castsoftware.wbslinker')
+        
+        analysis.add_selection('IBM.sample/DEMOESY2.ezt')
+#         analysis.set_verbose(True)
+        analysis.run()
+
+#         get_data_created_by_plugin(analysis)
+
+        procedure = analysis.get_object_by_name('TEST-TRANS', 'Easyproc')
+        self.assertTrue(procedure)
+
+        file = analysis.get_object_by_name('M8134D', 'Easyfile')
+        self.assertTrue(file)
+
+        self.assertTrue(analysis.get_link_by_caller_callee('accessReadLink', procedure, file))
+
+    def test_job_input_file_link(self):
+
+        analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
+        
+        analysis.add_dependency('com.castsoftware.internal.platform')
+        analysis.add_dependency('com.castsoftware.wbslinker')
+        
+        analysis.add_selection('IBM.sample/DEMODB2B.ezt')
+#         analysis.set_verbose(True)
+        analysis.run()
+
+#         get_data_created_by_plugin(analysis)
+
+        procedure = analysis.get_object_by_name('DEMODB2B', 'Eztprogram')
+        self.assertTrue(procedure)
+
+        file = analysis.get_object_by_name('FILEIN1', 'Easyfile')
+        self.assertTrue(file)
+
+        self.assertTrue(analysis.get_link_by_caller_callee('accessReadLink', procedure, file))
+
+    def test_print_report(self):
+
+        analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
+        
+        analysis.add_dependency('com.castsoftware.internal.platform')
+        analysis.add_dependency('com.castsoftware.wbslinker')
+        
+        analysis.add_selection('IBM.sample/DEMODB2A.ezt')
+#         analysis.set_verbose(True)
+        analysis.run()
+
+#         get_data_created_by_plugin(analysis)
+
+        procedure = analysis.get_object_by_name('DEMODB2A', 'Eztprogram')
+        self.assertTrue(procedure)
+
+        file = analysis.get_object_by_name('REPORT1', 'Easyreport')
+        self.assertTrue(file)
+
+        self.assertTrue(analysis.get_link_by_caller_callee('accessReadLink', procedure, file))
+
+    def test_sort_link(self):
+
+        analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
+        
+        analysis.add_dependency('com.castsoftware.internal.platform')
+        analysis.add_dependency('com.castsoftware.wbslinker')
+        
+        analysis.add_selection('sample1/SAMPLE.esy')
+#         analysis.set_verbose(True)
+        analysis.run()
+
+#         get_data_created_by_plugin(analysis)
+
+        procedure = analysis.get_object_by_name('SAMPLE', 'Eztprogram')
+        self.assertTrue(procedure)
+
+        file = analysis.get_object_by_name('PERSNL', 'Easyfile')
+        self.assertTrue(file)
+
+        self.assertTrue(analysis.get_links_by_caller_callee('accessReadLink', procedure, file))
 
 
 if __name__ == "__main__":

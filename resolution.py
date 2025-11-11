@@ -70,4 +70,31 @@ class ResolutionInterpreter:
     def start_Get(self, statement):
         self.start_Put(statement)
         
+    def start_Job(self, statement):
+        from symbols import File
+        identifier = statement.get_input()
+        if not identifier:
+            return
+        identifier.resolved_as = self.__module.find_local_symbols(identifier.get_name(), 
+                                                                  [File])
+
+    def start_Sort(self, statement):
+        from symbols import File
+        identifier = statement.get_sorted()
+        if not identifier:
+            return
+        identifier.resolved_as = self.__module.find_local_symbols(identifier.get_name(), 
+                                                                  [File])
+
+        identifier = statement.get_to()
+        if not identifier:
+            return
+        identifier.resolved_as = self.__module.find_local_symbols(identifier.get_name(), 
+                                                                  [File])
         
+    def start_Print(self, statement):
+        from symbols import Report
+        identifier = statement.get_report()
+        identifier.resolved_as = self.__module.find_local_symbols(identifier.get_name(), 
+                                                                  [Report])
+

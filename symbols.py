@@ -794,6 +794,97 @@ class LinkInterpreter:
                         symbol.get_kb_object(),
                         self.create_bookmark(file))
 
+        # optional from
+        file = statement.get_from()
+        if not file:
+            return
+        
+        for symbol in file.resolved_as:
+            
+            if not symbol.get_kb_object():
+                continue
+        
+            create_link('accessReadLink', 
+                        caller, 
+                        symbol.get_kb_object(),
+                        self.create_bookmark(file))
+        
+    def start_Write(self, statement):
+        self.start_Put(statement)
+
+    def start_Get(self, statement):
+        file = statement.get_file()
+        caller = self.get_current_kb_symbol()
+        
+        for symbol in file.resolved_as:
+            
+            if not symbol.get_kb_object():
+                continue
+        
+            create_link('accessReadLink', 
+                        caller, 
+                        symbol.get_kb_object(),
+                        self.create_bookmark(file))
+
+    def start_Job(self, statement):
+        file = statement.get_input()
+        if not file:
+            return
+        caller = self.get_current_kb_symbol()
+        
+        for symbol in file.resolved_as:
+            
+            if not symbol.get_kb_object():
+                continue
+        
+            create_link('accessReadLink', 
+                        caller, 
+                        symbol.get_kb_object(),
+                        self.create_bookmark(file))
+
+    def start_Sort(self, statement):
+        caller = self.get_current_kb_symbol()
+        file = statement.get_sorted()
+        if not file:
+            return
+        
+        for symbol in file.resolved_as:
+            
+            if not symbol.get_kb_object():
+                continue
+        
+            create_link('accessReadLink', 
+                        caller, 
+                        symbol.get_kb_object(),
+                        self.create_bookmark(file))
+
+        file = statement.get_to()
+        if not file:
+            return
+        
+        for symbol in file.resolved_as:
+            
+            if not symbol.get_kb_object():
+                continue
+        
+            create_link('accessWriteLink', 
+                        caller, 
+                        symbol.get_kb_object(),
+                        self.create_bookmark(file))
+
+    def start_Print(self, statement):
+        file = statement.get_report()
+        caller = self.get_current_kb_symbol()
+        
+        for symbol in file.resolved_as:
+            
+            if not symbol.get_kb_object():
+                continue
+        
+            create_link('accessReadLink', 
+                        caller, 
+                        symbol.get_kb_object(),
+                        self.create_bookmark(file))
 
 
 def get_closests(modules, path):
