@@ -75,11 +75,46 @@ class Job(Statement):
     end = None
     stopped_by_other_statement = True
 
+    def __init__(self):
+        Statement.__init__(self)
+        self.input = None
+        
+    def get_input(self):
+        return self.input
+    
+    def on_end(self):
+        children = self.get_children()
+        children.move_to('INPUT')
+        try:
+            token = next(children)
+            self.input = get_identifier_from_token(token)
+        except:
+            pass
 
 class Sort(Statement):
     begin = 'SORT'
     end = None
     stopped_by_other_statement = True
+
+    def __init__(self):
+        Statement.__init__(self)
+        self.sorted = None
+        self.to = None
+        
+    def get_sorted(self):
+        return self.sorted
+    
+    def get_to(self):
+        return self.to
+    
+    def on_end(self):
+        children = self.get_children()
+        next(children) # SORT
+        token = next(children)
+        self.sorted = get_identifier_from_token(token)
+        next(children) # TO
+        token = next(children)
+        self.to = get_identifier_from_token(token)
 
 
 class Report(Statement):
@@ -185,25 +220,65 @@ class Get(Term):
 
 class Write(Term):
     
-    match = Seq('WRITE', Generic)
+    match = Or(Seq('WRITE', Generic, Optional(Or('UPDATE', 'ADD')), 'FROM', Generic), 
+               Seq('WRITE', Generic))
 
     def __init__(self):
         Term.__init__(self)
         self.file = None
+        self.__from = None
         
     def get_file(self):
         return self.file
+    
+    def get_from(self):
+        return self.__from
     
     def on_end(self):
         children = self.get_children()
         next(children) # command
         token = next(children)
         self.file = get_identifier_from_token(token)
+        try:
+            children.move_to('FROM')
+            next(children)
+            self.__from = get_identifier_from_token(token)
+        except:
+            pass
 
 
 class Put(Term):
     
-    match = Seq('PUT', Generic)
+    match = Or(Seq('PUT', Generic, 'FROM', Generic),
+               Seq('PUT', Generic))
+    
+    def __init__(self):
+        Term.__init__(self)
+        self.file = None
+        self.__from = None
+        
+    def get_file(self):
+        return self.file
+
+    def get_from(self):
+        return self.__from
+    
+    def on_end(self):
+        children = self.get_children()
+        next(children) # command
+        token = next(children)
+        self.file = get_identifier_from_token(token)
+        try:
+            next(children) # from
+            token = next(children)
+            self.__from = get_identifier_from_token(token)
+        except:
+            pass
+
+
+class Display(Term):
+    
+    match = Seq('DISPLAY', Generic)
 
     def __init__(self):
         Term.__init__(self)
@@ -217,13 +292,25 @@ class Put(Term):
         next(children) # command
         token = next(children)
         self.file = get_identifier_from_token(token)
-
 
 # on reports
 
 class Print(Term):
 
     match = Seq('PRINT', Generic)
+
+    def __init__(self):
+        Term.__init__(self)
+        self.report = None
+        
+    def get_report(self):
+        return self.report
+    
+    def on_end(self):
+        children = self.get_children()
+        next(children) # command
+        token = next(children)
+        self.report = get_identifier_from_token(token)
 
 
 # on programs

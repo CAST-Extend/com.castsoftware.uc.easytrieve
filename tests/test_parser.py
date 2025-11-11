@@ -1,5 +1,6 @@
 import unittest
 from easytrieve_parser import parse, Macro, Procedure, Program, File, Job, Sort, Data, SQL
+from easytrieve_parser import Put, Write
 
 
 class TestParser(unittest.TestCase):
@@ -171,6 +172,92 @@ END-IF.
        FROM CUST_TB''', sql.get_sql_text())
 
         self.assertEqual('INCLUDE (CUST_ID, CUST_ACCT_PRDCT_CD CUST_ACCT_ID)', sql.get_name())
+
+    def test_parse_put_from(self):
+        
+        text = """
+PARM SSID('DB2B') SQLID('TESTDB2')
+
+PUT FILE1
+PUT FILE1 FROM FILE2
+PUT FILE1
+"""
+
+        ast = list(parse(text))
+        
+        node = ast[0]
+        self.assertEqual(Program, type(node))
+
+        puts = list(node.get_sub_nodes(Put))
+        self.assertEqual(3, len(puts))
+        self.assertEqual('FILE2', puts[1].get_from().get_name())
+
+    def test_parse_write_from(self):
+        
+        text = """
+PARM SSID('DB2B') SQLID('TESTDB2')
+
+WRITE FILE1
+WRITE FILE2 UPDATE FROM FILE2
+WRITE FILE1
+"""
+
+        ast = list(parse(text))
+        
+        node = ast[0]
+        self.assertEqual(Program, type(node))
+
+        puts = list(node.get_sub_nodes(Write))
+        self.assertEqual(3, len(puts))
+        self.assertEqual('FILE2', puts[1].get_from().get_name())
+
+    def test_parse_job(self):
+        
+        text = """
+PARM SSID('DB2B') SQLID('TESTDB2')
+
+JOB INPUT M8234D START(GET-PROCESS-DATE) FINISH(ACH-PROC)
+  TRAN-WORK = PROOF-TRAN-RECORD
+  PERFORM TEST-TRANS
+
+*
+JOB INPUT M8124D START(START-OBLIGAT-PROC) FINISH(LAST-REC-PROC)
+*
+
+"""
+
+        ast = list(parse(text))
+        
+        node = ast[0]
+        self.assertEqual(Program, type(node))
+
+        jobs = list(node.get_sub_nodes(Job))
+        self.assertEqual(2, len(jobs))
+        self.assertEqual('M8234D', jobs[0].get_input().get_name())
+        self.assertEqual('M8124D', jobs[1].get_input().get_name())
+
+    def test_parse_job(self):
+        
+        text = """
+PARM SSID('DB2B') SQLID('TESTDB2')
+
+SORT PERSNL TO SORTWRK USING +
+(REGION, BRANCH) NAME MYSORT
+JOB INPUT SORTWRK NAME MYPROG
+PRINT REPORT1
+
+"""
+
+        ast = list(parse(text))
+        
+        node = ast[0]
+        self.assertEqual(Program, type(node))
+
+        jobs = list(node.get_sub_nodes(Sort))
+        self.assertEqual(1, len(jobs))
+        self.assertEqual('PERSNL', jobs[0].get_sorted().get_name())
+        self.assertEqual('SORTWRK', jobs[0].get_to().get_name())
+
 
 
 if __name__ == "__main__":
