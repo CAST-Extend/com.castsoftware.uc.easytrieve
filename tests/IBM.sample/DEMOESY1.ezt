@@ -1,0 +1,41 @@
+**********************************************************************
+* PROGRAM NAME: DEMOESY1                                             *
+*                                                                    *
+* THIS PROGRAM DOES THE FOLLOWING:                                   *
+*                                                                    *
+* A) CALCULATES BONUS AMOUNT FOR OFFICERS                            *
+* B) PRODUCES A REPORT OF CALCULATED BONUSES                         *
+* C) CREATES AN OUTPUT FILE OF INPUT IMAGE + BONUS AMOUNT            *
+**********************************************************************
+FILE FILEIN DISK  F (80)
+  COMPANY     1   2    A
+  BRANCH      3   3    A
+  OFFICER     6   4    A
+  WAGE        10  08 N 2
+  RATE        18  05 N 3 MASK ('ZZ.999')
+
+FILE FILEOUT DISK F (80)
+ OCOMPANY     1   2    A
+ OBRANCH      3   3    A
+ OOFFICER     6   4    A
+ OWAGE        10  08 N 2
+ ORATE        18  05 N 3 MASK ('ZZ.999')
+ OBONUS       24  08 N 2
+
+BONUS  W       9  N 2
+
+JOB INPUT FILEIN
+IF WAGE NUMERIC AND RATE NUMERIC
+   BONUS = WAGE * (RATE / 100)
+   MOVE FILEIN TO FILEOUT
+   OBONUS = BONUS
+   PUT FILEOUT
+   PRINT REPORT1
+END-IF
+
+REPORT REPORT1 LINESIZE 70 SUMSPACE 0
+CONTROL  FINAL COMPANY
+SUM      WAGE BONUS
+TITLE 1 'EXECUTIVE BONUS REPORT'
+LINE  1  COMPANY BRANCH OFFICER RATE WAGE BONUS
+

@@ -71,6 +71,20 @@ WCUST-DISP-CTR      VALUE 'XX+
         self.assertEqual(4, tokens[5].end_line)
         self.assertEqual(15, tokens[5].end_column)
 
+    def test_remove_continuation_character(self):
+
+        text = """
+*------------------------------------------------------------------*
+GET -
+  MYFILE.
+
+"""
+        lexer = EasyTrieveLexer()
+        tokens = list(lexer.get_tokens(text))
+
+        for token in tokens:
+            self.assertFalse(token == '-')
+
 
 if __name__ == "__main__":
     unittest.main()

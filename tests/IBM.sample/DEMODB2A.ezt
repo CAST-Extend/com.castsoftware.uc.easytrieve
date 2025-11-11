@@ -1,0 +1,108 @@
+*------------------------------------------------------------------*
+* PROGRAM: DEMODB2A                                                *
+* PURPOSE: DEMONSTRATE NATIVE SQL SUPPORT                          *
+*                                                                  *
+* EASYTRAN:  DEBUG=(NOLKGO)                                        *
+* EASYTRAN:  DCLINCL DCLACCTB                                      *
+* END-EASYTRAN                                                     *
+*------------------------------------------------------------------*
+
+PARM SSID('DB2B') SQLID('TESTDB2')
+*------------------------------------------------------------------*
+* PENGIEZT - DB2/SQL SAMPLE PROGRAM, NATIVE SQL METHOD.            *
+*------------------------------------------------------------------*
+WCUST-DISP-CTR      W         5  P VALUE 0
+WCUST-ID            W         9  A VALUE ' '
+WCUST-ACCT-PRDCT-CD W         3  A VALUE ' '
+WCUST-ACCT-ID       W        23  A VALUE ' '
+WCUST-ACCT-ID-NULL  W         2  B 0 VALUE 0
+
+ SQL DECLARE CUXAD-CURS          +
+     CURSOR FOR                  +
+        SELECT                   +
+             CUST_ID,            +
+             CUST_ACCT_PRDCT_CD, +
+             CUST_ACCT_ID        +
+        FROM CUST_TB
+
+JOB INPUT NULL
+PERFORM OPEN-CUXAD-CURS.
+
+DO UNTIL WCUST-DISP-CTR = 100
+   WCUST-DISP-CTR = WCUST-DISP-CTR + 1
+   PERFORM FETCH-NEXT-ADDR
+   IF SQLCODE = ZERO
+      PRINT REPORT1
+   END-IF
+END-DO.
+
+PERFORM CLOSE-CUXAD-CURS
+STOP
+
+*---------------------------------------------------------------*
+*      OPEN CURSOR FOE OUR TABLE.                               *
+*---------------------------------------------------------------*
+OPEN-CUXAD-CURS. PROC.
+  SQL OPEN CUXAD-CURS
+
+  CASE SQLCODE
+       WHEN 0
+           DISPLAY ' CUXAD GOOD OPEN ' SQLCODE
+       OTHERWISE
+           DISPLAY ' 1603  CUXAD OPEN  **ERROR ' SQLCODE
+           WCUST-DISP-CTR = 100
+  END-CASE
+END-PROC.
+
+*---------------------------------------------------------------*
+*      FETCH NEXT ROW                                           *
+*---------------------------------------------------------------*
+FETCH-NEXT-ADDR. PROC.
+
+  SQL FETCH                 +
+      CUXAD-CURS            +
+         INTO               +
+           :WCUST-ID,       +
+           :WCUST-ACCT-PRDCT-CD, +
+           :WCUST-ACCT-ID :WCUST-ACCT-ID-NULL
+
+  CASE SQLCODE
+       WHEN  0
+           DISPLAY WCUST-ID,            +
+                   WCUST-ACCT-PRDCT-CD, +
+                   WCUST-ACCT-ID
+       WHEN  100
+             PERFORM CLOSE-CUXAD-CURS
+             WCUST-DISP-CTR = 100
+       OTHERWISE
+             DISPLAY ' CUXAD   FETCH *ERROR* ' SQLCODE
+             WCUST-DISP-CTR = 100
+  END-CASE
+END-PROC.
+
+*---------------------------------------------------------------*
+*      CLOSE THE TABLE.                                         *
+*---------------------------------------------------------------*
+CLOSE-CUXAD-CURS. PROC.
+
+  SQL CLOSE CUXAD-CURS
+
+  CASE SQLCODE
+       WHEN 0
+           DISPLAY 'CUXAD GOOD CLOSE ' SQLCODE
+       OTHERWISE
+           DISPLAY ' 1603  CUXAD OPEN  **ERROR*' SQLCODE
+           WCUST-DISP-CTR = 100
+  END-CASE
+
+END-PROC.
+
+*---------------------------------------------------------------*
+* REPORT STATEMENT.                                             *
+*---------------------------------------------------------------*
+REPORT REPORT1 LINESIZE 80
+CONTROL FINAL NOPRINT
+TITLE 1 'CUSTOMER PRODUCT CODE LISTING'
+LINE 1 WCUST-ID             +
+       WCUST-ACCT-PRDCT-CD  +
+       WCUST-ACCT-ID

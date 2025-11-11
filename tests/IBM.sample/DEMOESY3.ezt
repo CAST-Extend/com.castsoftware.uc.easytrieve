@@ -1,0 +1,35 @@
+**********************************************************************
+* PROGRAM: DEMOESY3                                                  *
+* PURPOSE: DEMONSTRATE THE USE OF EASYTRIEVE MACROS FOR LAYOUTS      *
+*          DEMONSTRATE THE USE OF COPYBOOK OPTION IN OUTPUT COBOL    *
+*                                                                    *
+* THIS PROGRAM DOES THE FOLLOWING:                                   *
+*                                                                    *
+* A) CALCULATES BONUS AMOUNT FOR OFFICERS                            *
+* B) PRODUCES A REPORT OF CALCULATED BONUSES                         *
+* C) CREATES AN OUTPUT FILE OF BONUS RECORDS                         *
+*    (BONUS AMOUNT REPLACES THE WAGE FIELD)                          *
+**********************************************************************
+FILE FILEIN DISK  F (80)
+%EZTCOPYA LOC(*) PFX()
+
+FILE FILEOUT DISK F (80)
+%EZTCOPYA LOC(*) PFX(O-)
+
+BONUS  W       9  N 2
+
+JOB INPUT FILEIN
+IF WAGE NUMERIC AND RATE NUMERIC
+   BONUS = WAGE * (RATE / 100)
+   MOVE FILEIN TO FILEOUT
+   O-WAGE = BONUS
+   PUT FILEOUT
+   PRINT REPORT1
+END-IF
+
+REPORT REPORT1 LINESIZE 70 SUMSPACE 0
+CONTROL  FINAL COMPANY
+SUM      WAGE BONUS
+TITLE 1 'EXECUTIVE BONUS REPORT'
+LINE  1  COMPANY BRANCH OFFICER RATE WAGE BONUS
+

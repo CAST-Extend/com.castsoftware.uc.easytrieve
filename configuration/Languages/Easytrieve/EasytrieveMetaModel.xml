@@ -124,5 +124,12 @@
 		<inheritedCategory name="UAObject"/>
 		<inheritedCategory name="Easytrieve"/>
 	</type>	
+
+    <type name="EasySQLQuery" rid="12">
+        <description>Easy Call to Program</description>
+        <inheritedCategory name="UAObject"/>
+        <inheritedCategory name="Easytrieve"/>
+        <inheritedCategory name="CAST_SQL_MetricableQuery"/>
+    </type> 
 	
 </metaModel>

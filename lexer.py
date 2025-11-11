@@ -121,8 +121,10 @@ class EasyTrieveLexer:
                     else:
                         # line does not start with SQL
                         begin_column = 1
-                        
-                        for element in splitter.split(line):
+                        scanned_line = line
+                        if line.rstrip().endswith(('-', '+')):
+                            scanned_line = line.rstrip()[:-1]
+                        for element in splitter.split(scanned_line):
                             
                             if inside_string:
                                 string_text += element

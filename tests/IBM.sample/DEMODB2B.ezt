@@ -1,0 +1,23 @@
+*------------------------------------------------------------------*
+* PROGRAM: DEMODB2B                                                *
+* PURPOSE: DEMONSTRATE THE USE OF SQL FILE AS INPUT.               *
+*                                                                  *
+* EASYTRAN:  DCLINCL DCLACCTB                                      *
+* END-EASYTRAN                                                     *
+*------------------------------------------------------------------*
+PARM SSID('DB2B') SQLID('TESTDB2')
+
+FILE FILEIN1 SQL
+SQL INCLUDE                                          +
+          (CUST_ID, CUST_ACCT_PRDCT_CD CUST_ACCT_ID) +
+       LOCATION *                                    +
+       NULLABLE                                      +
+       FROM CUST_TB
+
+WCUST-CTR           W         5  P VALUE 0
+
+JOB INPUT FILEIN1
+WCUST-CTR = WCUST-CTR + 1
+IF WCUST-CTR = 100
+   STOP
+END-IF.

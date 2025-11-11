@@ -1,0 +1,32 @@
+*------------------------------------------------------------------*
+* PROGRAM: DEMODB2C                                                *
+* PURPOSE: DEMONSTRATE SQL SUPPORT ON JOB STATEMENT                *
+*                                                                  *
+* EASYTRAN:  DCLINCL DCLACCTB                                      *
+* END-EASYTRAN                                                     *
+*------------------------------------------------------------------*
+PARM SSID('DB2B') SQLID('TESTDB2')
+
+*------------------------------------------------------------------*
+* PENGIEZT - DB2/SQL SAMPLE PROGRAM, "JOB INPUT SQL" METHOD.       *
+*------------------------------------------------------------------*
+WCUST-DISP-CTR      W         5  P VALUE 0
+WCUST-ID            W         9  A VALUE ' '
+WCUST-ACCT-PRDCT-CD W         3  A VALUE ' '
+WCUST-ACCT-ID       W        23  A VALUE ' '
+
+JOB INPUT SQL
+ SELECT  CUST_ID,              +
+         CUST_ACCT_PRDCT_CD,   +
+         CUST_ACCT_ID          +
+ FROM    CUST_TB               +
+ INTO   :WCUST-ID,             +
+        :WCUST-ACCT-PRDCT-CD,  +
+        :WCUST-ACCT-ID
+
+WCUST-DISP-CTR = WCUST-DISP-CTR + 1
+IF WCUST-DISP-CTR = 100
+   STOP
+END-IF.
+
+*---------------- END OF PROGRA******* ----------------------------*
