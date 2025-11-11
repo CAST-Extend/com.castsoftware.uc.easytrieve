@@ -683,8 +683,13 @@ class Sql(Symbol):
 
         kb_symbol = Symbol.save(self, file, current_stats)
         parent_kb_symbol = self.get_parent_symbol().get_kb_object()
-        # @todo bookmark
-        create_link('callLink', parent_kb_symbol, kb_symbol)
+        bookmark = Bookmark(self.get_root_symbol().get_file(),
+                            self.get_begin_line(),
+                            1,
+                            self.get_begin_line()+1,
+                            1
+                            )
+        create_link('callLink', parent_kb_symbol, kb_symbol, bookmark)
         kb_symbol.save_property('CAST_SQL_MetricableQuery.sqlQuery',
                                 self._ast.get_sql_text().text)
 
