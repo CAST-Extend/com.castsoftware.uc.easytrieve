@@ -64,12 +64,24 @@ class ResolutionInterpreter:
         identifier.resolved_as = self.__module.find_local_symbols(identifier.get_name(), 
                                                                   [File])
         
+        identifier = statement.get_from()
+        if not identifier:
+            return
+        identifier.resolved_as = self.__module.find_local_symbols(identifier.get_name(), 
+                                                                  [File])
+        
     def start_Write(self, statement):
         self.start_Put(statement)
         
     def start_Get(self, statement):
-        self.start_Put(statement)
-        
+        from symbols import File
+        identifier = statement.get_file()
+        identifier.resolved_as = self.__module.find_local_symbols(identifier.get_name(), 
+                                                                  [File])
+
+    def start_Point(self, statement):
+        self.start_Get(statement)
+                
     def start_Job(self, statement):
         from symbols import File
         identifier = statement.get_input()

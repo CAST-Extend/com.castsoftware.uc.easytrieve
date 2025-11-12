@@ -23,7 +23,7 @@ def parse(text):
         parser = Parser(EasyTrieveLexer,
                         [Program],
                         [File, Data, Procedure, Job, Sort, Report],
-                        [Perform, Start, Finish, Get, Write, Print, Put, Call, SQL])
+                        [Perform, Start, Finish, Get, Write, Print, Put, Point, Call, SQL])
 
     return parser.parse(text)
 
@@ -274,6 +274,23 @@ class Put(Term):
             self.__from = get_identifier_from_token(token)
         except:
             pass
+
+
+class Point(Term):
+    
+    match = Seq('POINT', Generic)
+    
+    def __init__(self):
+        Term.__init__(self)
+        self.file = None
+    def get_file(self):
+        return self.file
+
+    def on_end(self):
+        children = self.get_children()
+        next(children) # command
+        token = next(children)
+        self.file = get_identifier_from_token(token)
 
 
 class Display(Term):

@@ -826,6 +826,20 @@ class LinkInterpreter:
                         symbol.get_kb_object(),
                         self.create_bookmark(file))
 
+    def start_Point(self, statement):
+        file = statement.get_file()
+        caller = self.get_current_kb_symbol()
+        
+        for symbol in file.resolved_as:
+            
+            if not symbol.get_kb_object():
+                continue
+        
+            create_link('accessWriteLink', 
+                        caller, 
+                        symbol.get_kb_object(),
+                        self.create_bookmark(file))
+
     def start_Job(self, statement):
         file = statement.get_input()
         if not file:

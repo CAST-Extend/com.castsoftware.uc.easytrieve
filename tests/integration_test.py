@@ -221,6 +221,27 @@ class TestIntegration(unittest.TestCase):
 
         self.assertTrue(analysis.get_links_by_caller_callee('accessReadLink', procedure, file))
 
+    def test_point_file(self):
+
+        analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
+        
+        analysis.add_dependency('com.castsoftware.internal.platform')
+        analysis.add_dependency('com.castsoftware.wbslinker')
+        
+        analysis.add_selection('sample1/SAMPLE_POINT.esy')
+#         analysis.set_verbose(True)
+        analysis.run()
+
+#         get_data_created_by_plugin(analysis)
+
+        procedure = analysis.get_object_by_name('SAMPLE_POINT', 'Eztprogram')
+        self.assertTrue(procedure)
+
+        file = analysis.get_object_by_name('PERSNL', 'Easyfile')
+        self.assertTrue(file)
+
+        self.assertTrue(analysis.get_link_by_caller_callee('accessWriteLink', procedure, file))
+
 
 if __name__ == "__main__":
     unittest.main()

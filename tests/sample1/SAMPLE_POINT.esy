@@ -1,0 +1,8 @@
+* 
+FILE PERSNL FB(150 1800)                                               
+  EMPNAME  17  8  A                                                    
+  EMP#      9  5  N                                                    
+  DEPT     98  3  N                                                    
+  GROSS    94  4  P  2        
+
+POINT PERSNL   GE KEY-V-KEY, STATUS
