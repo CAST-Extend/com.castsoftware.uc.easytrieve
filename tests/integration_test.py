@@ -73,6 +73,7 @@ class TestIntegration(unittest.TestCase):
         analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('IBM.sample/DEMOESY2.ezt')
 #         analysis.set_verbose(True)
@@ -94,6 +95,7 @@ class TestIntegration(unittest.TestCase):
         
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('IBM.sample/DEMOESY2.ezt')
 #         analysis.set_verbose(True)
@@ -115,6 +117,7 @@ class TestIntegration(unittest.TestCase):
         
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('IBM.sample/DEMODB2B.ezt')
 #         analysis.set_verbose()
@@ -143,6 +146,7 @@ class TestIntegration(unittest.TestCase):
         
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('IBM.sample/DEMOESY2.ezt')
 #         analysis.set_verbose(True)
@@ -164,6 +168,7 @@ class TestIntegration(unittest.TestCase):
         
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('IBM.sample/DEMODB2B.ezt')
 #         analysis.set_verbose(True)
@@ -185,6 +190,7 @@ class TestIntegration(unittest.TestCase):
         
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('IBM.sample/DEMODB2A.ezt')
 #         analysis.set_verbose(True)
@@ -206,6 +212,7 @@ class TestIntegration(unittest.TestCase):
         
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('sample1/SAMPLE.esy')
 #         analysis.set_verbose(True)
@@ -227,6 +234,7 @@ class TestIntegration(unittest.TestCase):
         
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('sample1/SAMPLE_POINT.esy')
 #         analysis.set_verbose(True)
@@ -248,6 +256,7 @@ class TestIntegration(unittest.TestCase):
         
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('sample1/SAMPLE.esy')
         analysis.add_selection('sample1/SAMPLE_CALL.esy')
@@ -269,6 +278,7 @@ class TestIntegration(unittest.TestCase):
         analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
         analysis.add_dependency('com.castsoftware.internal.platform')
         analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
         
         analysis.add_selection('IBM.sample/DEMOESY2.ezt')
 #         analysis.set_verbose(True)
