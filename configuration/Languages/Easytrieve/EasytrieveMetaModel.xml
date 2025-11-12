@@ -126,7 +126,7 @@
 	</type>	
 
     <type name="EasySQLQuery" rid="12">
-        <description>Easy Call to Program</description>
+        <description>Easy SQL Query</description>
         <inheritedCategory name="UAObject"/>
         <inheritedCategory name="Easytrieve"/>
         <inheritedCategory name="CAST_SQL_MetricableQuery"/>
