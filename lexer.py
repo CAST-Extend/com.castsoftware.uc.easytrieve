@@ -62,7 +62,7 @@ class EasyTrieveLexer:
                 
                 if inside_sql:
                     sql_fragment = line.rstrip()
-                    if sql_fragment.endswith('+'):
+                    if sql_fragment.endswith(('-', '+')):
                         sql_fragment = sql_fragment[:-1].rstrip()
                         current_sql_text += sql_fragment + '\n'
                     else:
@@ -97,9 +97,9 @@ class EasyTrieveLexer:
                         
                         yield result
                         
-                        sql_fragment = line[sql_position+3:]
+                        sql_fragment = line[sql_position+3:].rstrip()
                         
-                        if sql_fragment.endswith('+'):
+                        if sql_fragment.endswith(('-', '+')):
                             sql_fragment = sql_fragment[:-1].rstrip()
                             current_sql_text = sql_fragment + '\n'
                         else:

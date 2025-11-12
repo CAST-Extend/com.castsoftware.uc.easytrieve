@@ -114,6 +114,29 @@ GET -
         self.assertEqual(SQLText, tokens[7].type)
         self.assertEqual(''' SELECT   Z1.A_ADVC ''', tokens[7].text)
 
+    def test_sql_continuation_with_spaces_after(self):
+
+        text = """
+W-VERSION-CHAR    W-VERSION  1   A   OCCURS 32                                  
+                                                                                
+ SQL INCLUDE LOCATION * FROM SYSIBM.SYSPACKAGE                                  
+                                                                                
+* CURSOR FOR CPACKAGE DETAILS                                                   
+ SQL DECLARE CPACKAGE CURSOR FOR                   +                            
+     SELECT 1 FROM SYSIBM.SYSPACKAGE               +                            
+       WHERE COLLID = :W-COLLID                    +                            
+         AND NAME = :W-PACKAGE                     +                            
+         AND VERSION = :W-VERSION                                               
+                                                                                
+SORT UT01 TO UT01 USING (IN-REC)                                                
+"""
+        lexer = EasyTrieveLexer()
+        tokens = list(lexer.get_tokens(text))
+        
+        self.assertEqual(SQLText, tokens[18].type)
+        self.assertEqual(7, tokens[18].get_begin_line())
+        self.assertEqual(11, tokens[18].get_end_line())
+
 
 if __name__ == "__main__":
     unittest.main()
