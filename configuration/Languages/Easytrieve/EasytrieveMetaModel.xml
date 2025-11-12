@@ -15,7 +15,7 @@
 	<!-- CAST Easy language categories and types -->
 	<category name="Easytrieve" rid="2">
 		<description>Easytrieve Plus Language</description>
-		<attribute name="extensions" stringValue="*.ESY;*.MAC;*.esy;*.mac;*.ezt"/>
+		<attribute name="extensions" stringValue="*.esy;*.mac;*.ezt"/>
 		<inheritedCategory name="UniversalLanguage"/>
 		<inheritedCategory name="CsvLanguage"/>
 		<inheritedCategory name="caseInsensitive"/>
