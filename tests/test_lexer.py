@@ -1,5 +1,5 @@
 import unittest
-from lexer import EasyTrieveLexer, Comment, SQLText, String
+from lexer import EasyTrieveLexer, Comment, SQLText, String, Keyword
 
 
 class TestLexer(unittest.TestCase):
@@ -84,6 +84,35 @@ GET -
 
         for token in tokens:
             self.assertFalse(token == '-')
+
+    def test_sql_not_at_start(self):
+
+        text = """
+*------------------------------------------------------------------*
+ FILE UT01 SQL (  +
+  SELECT   Z1.A_ADVC 
+"""
+        lexer = EasyTrieveLexer()
+        tokens = list(lexer.get_tokens(text))
+
+        self.assertEqual(Keyword, tokens[6].type)
+        self.assertEqual(SQLText, tokens[7].type)
+        self.assertEqual(''' (  
+  SELECT   Z1.A_ADVC''', tokens[7].text)
+
+    def test_sql_not_at_start_one_line(self):
+
+        text = """
+*------------------------------------------------------------------*
+ FILE UT01 SQL SELECT   Z1.A_ADVC 
+*------------------------------------------------------------------*
+"""
+        lexer = EasyTrieveLexer()
+        tokens = list(lexer.get_tokens(text))
+
+        self.assertEqual(Keyword, tokens[6].type)
+        self.assertEqual(SQLText, tokens[7].type)
+        self.assertEqual(''' SELECT   Z1.A_ADVC ''', tokens[7].text)
 
 
 if __name__ == "__main__":

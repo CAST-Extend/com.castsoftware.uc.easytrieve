@@ -119,11 +119,12 @@ class EasyTrieveLexer:
                             sql_begin_column = None
                         
                     else:
-                        # line does not start with SQL
                         begin_column = 1
                         scanned_line = line
+                        continuation = False
                         if line.rstrip().endswith(('-', '+')):
                             scanned_line = line.rstrip()[:-1]
+                            continuation = True
                         for element in splitter.split(scanned_line):
                             
                             if inside_string:
@@ -140,11 +141,30 @@ class EasyTrieveLexer:
                                     
                                     inside_string = False
                             
+                            elif inside_sql:
+                                current_sql_text += element
+                            
                             elif element == "'":
                                 inside_string = True
                                 string_text = element
                                 string_begin_line = line_number
                                 string_begin_column = begin_column
+                            
+                            elif element == 'SQL':
+                                
+                                result = Token('SQL', Keyword)
+                                result.begin_line = line_number
+                                result.end_line = line_number
+                                result.begin_column = begin_column
+                                result.end_column = begin_column + 2
+                                
+                                yield result
+                                
+                                current_sql_text = ''
+                                inside_sql = True
+                                sql_begin_line = line_number
+                                sql_begin_column = begin_column + 3
+                            
                             else:
                                     
                                 result = Token(element, Generic)
@@ -156,4 +176,22 @@ class EasyTrieveLexer:
                                 yield result
                             
                             begin_column += len(element)
-
+                        
+                        if inside_sql:
+                            if continuation:
+                                current_sql_text += '\n'
+                            else:
+                                # one line SQL
+                                result = Token(current_sql_text, SQLText)
+                                result.begin_line = sql_begin_line
+                                result.end_line = line_number
+                                result.begin_column = sql_begin_column
+                                result.end_column = sql_begin_column+len(current_sql_text)
+        
+                                yield result
+        
+                                current_sql_text = None
+                                inside_sql = False
+                                sql_begin_line = None
+                                sql_begin_column = None
+                            
