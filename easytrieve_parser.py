@@ -436,6 +436,10 @@ def is_sql(node):
     return isinstance(node, SQL)
 
 
+def is_node(node):
+    return isinstance(node, Node)
+
+
 def get_identifier_from_token(token):
     
     node = Identifier()

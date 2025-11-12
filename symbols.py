@@ -5,7 +5,7 @@ from cast.analysers import log, CustomObject, Bookmark, create_link
 from cast.application import open_source_file
 from easytrieve_parser import parse
 from easytrieve_parser import is_file, is_macro, is_program, is_root
-from easytrieve_parser import is_report, is_procedure, is_sql
+from easytrieve_parser import is_report, is_procedure, is_sql, is_node
 from light_parser import Node, Token, Walker
 from resolution import resolve as resolution_resolve
 
@@ -122,11 +122,13 @@ class Symbol(Namespace):
         """
         @param symbols:list of type
         """
-        if type(self.get_parent_symbol()) in symbols:
-            return self.get_parent_symbol()
-        else:
+        if type(self) in symbols:
+            return self
+        elif self.get_parent_symbol():
             return self.get_parent_symbol().get_ancestor_symbol(symbols)
-    
+        else:
+            return None
+        
     def get_root_symbol(self):
         
         if self.__parent:
@@ -450,7 +452,6 @@ class Symbol(Namespace):
                 symbol.__start_line = node.get_begin_line()
                 symbol._ast = node
                 self.add_symbol(name, symbol)
-                symbol._fully_parse(node.get_sub_nodes())
 
             if is_procedure(node):
                 #log.debug("in procedure, token: {} ".format(node))
@@ -460,7 +461,6 @@ class Symbol(Namespace):
                 symbol.__start_line = node.get_begin_line()
                 symbol._ast = node
                 self.add_symbol(name, symbol)
-                symbol._fully_parse(node.get_sub_nodes())
 
             if is_report(node):
                 #log.debug("in prototype, token: {} ".format(node))
@@ -470,9 +470,8 @@ class Symbol(Namespace):
                 symbol.__start_line = node.get_begin_line()
                 symbol._ast = node
                 self.add_symbol(name, symbol)
-                symbol._fully_parse(node.get_sub_nodes())
 
-            elif is_sql(node):
+            if is_sql(node):
                 name = node.get_name()
                 # if parent is file or report, take grand parent
                 parent = self.get_ancestor_symbol([Module, Procedure])
@@ -480,7 +479,10 @@ class Symbol(Namespace):
                 symbol.__start_line = node.get_begin_line()
                 symbol._ast = node
                 parent.add_symbol(name, symbol)
+                
+            if is_node(node):
                 symbol._fully_parse(node.get_sub_nodes())
+            
 
 
 class Library:

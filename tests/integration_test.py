@@ -140,6 +140,26 @@ class TestIntegration(unittest.TestCase):
        NULLABLE
        FROM CUST_TB''', getattr(query, 'CAST_SQL_MetricableQuery.sqlQuery'))
 
+    def test_create_sql_query_one_line(self):
+
+        analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
+        
+        analysis.add_dependency('com.castsoftware.internal.platform')
+        analysis.add_dependency('com.castsoftware.wbslinker')
+        analysis.add_dependency(r'C:\ProgramData\CAST\CAST\Extensions\com.castsoftware.sqlanalyzer.3.7.17-funcrel')
+        
+        analysis.add_selection('sample1/SAMPLE_SQL.esy')
+#         analysis.set_verbose()
+        analysis.run()
+
+#         get_data_created_by_plugin(analysis)
+                
+        program = analysis.get_object_by_name('SAMPLE_SQL', 'Eztprogram')
+        self.assertTrue(program)
+
+        query = analysis.get_object_by_name('SELECT * FROM TOTO', 'EasySQLQuery')
+        self.assertTrue(query)
+
     def test_get_file_link(self):
 
         analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
