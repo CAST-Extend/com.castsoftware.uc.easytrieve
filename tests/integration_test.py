@@ -242,6 +242,49 @@ class TestIntegration(unittest.TestCase):
 
         self.assertTrue(analysis.get_link_by_caller_callee('accessWriteLink', procedure, file))
 
+    def test_call_program(self):
+
+        analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
+        
+        analysis.add_dependency('com.castsoftware.internal.platform')
+        analysis.add_dependency('com.castsoftware.wbslinker')
+        
+        analysis.add_selection('sample1/SAMPLE.esy')
+        analysis.add_selection('sample1/SAMPLE_CALL.esy')
+#         analysis.set_verbose(True)
+        analysis.run()
+
+#         get_data_created_by_plugin(analysis)
+
+        caller = analysis.get_object_by_name('SAMPLE_CALL', 'Eztprogram')
+        self.assertTrue(caller)
+
+        callee = analysis.get_object_by_name('SAMPLE', 'Eztprogram')
+        self.assertTrue(callee)
+
+        self.assertTrue(analysis.get_link_by_caller_callee('callLink', caller, callee))
+
+    def test_call_missing_program(self):
+        
+        analysis = cast.analysers.test.UATestAnalysis('Easytrieve')
+        analysis.add_dependency('com.castsoftware.internal.platform')
+        analysis.add_dependency('com.castsoftware.wbslinker')
+        
+        analysis.add_selection('IBM.sample/DEMOESY2.ezt')
+#         analysis.set_verbose(True)
+        analysis.run()
+
+#         get_data_created_by_plugin(analysis)
+
+        program = analysis.get_object_by_name('LNSDATE-RTN', 'Easyproc')
+        self.assertTrue(program)
+
+        procedure = analysis.get_object_by_name('LNSDATE', 'EasyCalltoProgram')
+        self.assertTrue(procedure)
+
+        self.assertTrue(analysis.get_link_by_caller_callee('callLink', program, procedure))
+        self.assertEqual('LNSDATE', getattr(procedure, 'CAST_CallToProgram.programName'))
+        
 
 if __name__ == "__main__":
     unittest.main()

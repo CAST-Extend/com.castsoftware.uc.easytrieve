@@ -693,7 +693,19 @@ class Sql(Symbol):
         kb_symbol.save_property('CAST_SQL_MetricableQuery.sqlQuery',
                                 self._ast.get_sql_text().text)
 
+
+class UnknownProgram(Symbol):
     
+    def get_metamodel_type(self):
+        return 'EasyCalltoProgram'
+
+    def save(self, file=None, current_stats=None):
+
+        kb_symbol = Symbol.save(self, file, current_stats)
+        kb_symbol.save_property('CAST_CallToProgram.programName',
+                                self.get_name())
+
+
 class LinkInterpreter:
     """
     Creates links.
@@ -900,6 +912,40 @@ class LinkInterpreter:
                         symbol.get_kb_object(),
                         self.create_bookmark(file))
 
+    def start_Call(self, statement):
+        program = statement.get_called_program()
+        caller = self.get_current_kb_symbol()
+        
+        # ensure we have something
+        self.create_unkonwn_program_if_needed(program)
+        
+        for symbol in program.resolved_as:
+            
+            if not symbol.get_kb_object():
+                continue
+        
+            create_link('callLink', 
+                        caller, 
+                        symbol.get_kb_object(),
+                        self.create_bookmark(program))
+
+    def create_unkonwn_program_if_needed(self, identifier):
+        # create an unknown program if needed
+        if identifier.resolved_as:
+            return # no need
+        
+        parent = self.get_current_symbol()
+        name = identifier.get_name()
+        unknown = parent.find_local_symbol(name, [UnknownProgram])
+        if not unknown:
+            unknown = UnknownProgram(name, parent)
+            unknown.__start_line = identifier.get_begin_line()
+            unknown._ast = identifier
+            parent.add_symbol(name, unknown)
+            unknown.save(file=self.file)
+        
+        identifier.resolved_as = [unknown]
+            
 
 def get_closests(modules, path):
     """

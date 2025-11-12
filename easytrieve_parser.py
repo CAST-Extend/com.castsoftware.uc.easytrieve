@@ -336,6 +336,19 @@ class Call(Term):
     
     match = Seq('CALL', Generic)
 
+    def __init__(self):
+        Term.__init__(self)
+        self.called = None
+        
+    def get_called_program(self):
+        return self.called
+    
+    def on_end(self):
+        children = self.get_children()
+        next(children) # command
+        token = next(children)
+        self.called = get_identifier_from_token(token)
+
 
 class SQL(Term):
     

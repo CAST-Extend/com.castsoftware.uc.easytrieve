@@ -110,3 +110,13 @@ class ResolutionInterpreter:
         identifier.resolved_as = self.__module.find_local_symbols(identifier.get_name(), 
                                                                   [Report])
 
+    def start_Call(self, statement):
+        from symbols import Module
+        identifier = statement.get_called_program()
+        result = self.__library.find_path(identifier.get_name(), 
+                                          self.__module.get_path())
+
+        identifier.resolved_as = []
+        if result:
+            identifier.resolved_as = [result]
+        
