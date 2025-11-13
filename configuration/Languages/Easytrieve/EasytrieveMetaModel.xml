@@ -119,14 +119,14 @@
 
 	
 	<type name="EasyCalltoProgram" rid="11">
-		<description>Easy Call to Program</description>
+		<description>Easytrieve Call to Program</description>
 		<inheritedCategory name="CAST_CallToProgram"/>
 		<inheritedCategory name="UAObject"/>
 		<inheritedCategory name="Easytrieve"/>
 	</type>	
 
     <type name="EasySQLQuery" rid="12">
-        <description>Easy SQL Query</description>
+        <description>Easytrieve SQL Query</description>
         <inheritedCategory name="UAObject"/>
         <inheritedCategory name="Easytrieve"/>
         <inheritedCategory name="CAST_SQL_MetricableQuery"/>
