@@ -37,7 +37,9 @@ class EaysytrieveExtension(ua.Extension):
 
         module = Module(_file.get_path(), _file=_file)
         self.library.add_module(module)
+        # create global symbols
         module.light_parse()
+        module.clean()
 
     def end_analysis(self):
         if not self.active:
@@ -51,6 +53,7 @@ class EaysytrieveExtension(ua.Extension):
                 module.resolve()
                 module.save()
                 module.save_links()
+                module.clean()
             except:
                 log.warning('Issue during scan of ' + str(module.get_path()) + traceback.format_exc())
 
